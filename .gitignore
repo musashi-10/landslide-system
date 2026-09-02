@@ -1,0 +1,72 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# IDEs
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Data files
+data/raw/
+data/processed/
+*.csv
+*.parquet
+*.tif
+*.tiff
+*.h5
+*.hdf5
+
+# ML artifacts
+models/
+*.pkl
+*.joblib
+*.onnx
+*.pt
+*.pth
+
+# Build / distribution
+dist/
+build/
+*.egg-info/
+
+# Node
+node_modules/
+frontend/dist/
+frontend/build/
+
+# Temporary files
+tmp/
+temp/
