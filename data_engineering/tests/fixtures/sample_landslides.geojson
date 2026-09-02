@@ -1,0 +1,47 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {"type": "Point", "coordinates": [88.6123, 27.3412]},
+      "properties": {
+        "event_id": "GLS001",
+        "date": "2022-06-15",
+        "elevation": 1450.0,
+        "slope": 38.2,
+        "aspect": 220.0,
+        "soil_type": "clay_loam",
+        "geology": "gneiss",
+        "land_cover": "forest"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {"type": "Point", "coordinates": [88.4560, 27.1234]},
+      "properties": {
+        "event_id": "GLS002",
+        "date": "2023-05-20",
+        "elevation": 980.0,
+        "slope": 29.5,
+        "aspect": 185.0,
+        "soil_type": "sandy_loam",
+        "geology": "schist",
+        "land_cover": "shrubland"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {"type": "Point", "coordinates": [88.7890, 27.5678]},
+      "properties": {
+        "event_id": "GLS003",
+        "date": "2024-07-04",
+        "elevation": 1820.0,
+        "slope": 42.1,
+        "aspect": 270.0,
+        "soil_type": "clay",
+        "geology": "quartzite",
+        "land_cover": "forest"
+      }
+    }
+  ]
+}
