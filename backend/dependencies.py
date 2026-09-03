@@ -38,16 +38,16 @@ def _alert_repository() -> AlertRepository:
 
 
 @lru_cache(maxsize=1)
-def _ml_provider(settings: BackendSettings | None = None) -> MLProvider:
-    s = settings or get_backend_settings()
+def _ml_provider() -> MLProvider:
+    s = get_backend_settings()
     if s.use_mock_ml:
         return MockMLProvider()
     return HttpMLProvider(base_url=s.ml_service_url, timeout=s.ml_service_timeout)
 
 
 @lru_cache(maxsize=1)
-def _notification_provider(settings: BackendSettings | None = None) -> NotificationProvider:
-    s = settings or get_backend_settings()
+def _notification_provider() -> NotificationProvider:
+    s = get_backend_settings()
     if s.notification_provider == "email":
         recipients = [r.strip() for r in s.alert_email_recipients.split(",") if r.strip()]
         return EmailNotificationProvider(
@@ -61,8 +61,8 @@ def _notification_provider(settings: BackendSettings | None = None) -> Notificat
 
 
 @lru_cache(maxsize=1)
-def _alert_engine(settings: BackendSettings | None = None) -> AlertEngine:
-    s = settings or get_backend_settings()
+def _alert_engine() -> AlertEngine:
+    s = get_backend_settings()
     config = AlertConfig(
         min_risk_level=s.alert_min_risk_level,
         cooldown_seconds=s.alert_cooldown_seconds,
@@ -72,24 +72,24 @@ def _alert_engine(settings: BackendSettings | None = None) -> AlertEngine:
     return AlertEngine(
         config=config,
         alert_repository=_alert_repository(),
-        notification_provider=_notification_provider(s),
+        notification_provider=_notification_provider(),
     )
 
 
 @lru_cache(maxsize=1)
-def _alert_service(settings: BackendSettings | None = None) -> AlertService:
+def _alert_service() -> AlertService:
     return AlertService(
-        engine=_alert_engine(settings),
+        engine=_alert_engine(),
         repository=_alert_repository(),
     )
 
 
 @lru_cache(maxsize=1)
-def _risk_service(settings: BackendSettings | None = None) -> RiskService:
+def _risk_service() -> RiskService:
     return RiskService(
-        ml_provider=_ml_provider(settings),
+        ml_provider=_ml_provider(),
         risk_repository=_risk_repository(),
-        alert_engine=_alert_engine(settings),
+        alert_engine=_alert_engine(),
     )
 
 
