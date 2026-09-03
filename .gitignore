@@ -43,14 +43,16 @@ Thumbs.db
 data/raw/
 data/processed/
 *.csv
+# Keep test fixture CSVs tracked
+!**/tests/fixtures/*.csv
 *.parquet
 *.tif
 *.tiff
 *.h5
 *.hdf5
 
-# ML artifacts
-models/
+# ML artifacts — trained model artifact directories only (not source code packages)
+ml/models/artifacts/
 *.pkl
 *.joblib
 *.onnx
