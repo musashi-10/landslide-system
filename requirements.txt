@@ -12,13 +12,13 @@ pyproj
 fiona
 fastapi
 uvicorn[standard]
+httpx
 pydantic
 pydantic-settings
 sqlalchemy
 psycopg2-binary
 python-dotenv
 requests
-httpx
 pytest
 pytest-cov
 jupyter
