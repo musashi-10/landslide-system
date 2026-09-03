@@ -14,6 +14,10 @@ resulting Parquet file.  The geometry / satellite columns are optional and
 joined via location_id.
 """
 
-from gis.pipeline import build_static_feature_dataset
-
-__all__ = ["build_static_feature_dataset"]
+try:
+    from gis.pipeline import build_static_feature_dataset
+    __all__ = ["build_static_feature_dataset"]
+except ImportError:
+    # rasterio / geopandas not installed in this environment.
+    # GIS functionality is unavailable but the package can still be imported.
+    __all__ = []
