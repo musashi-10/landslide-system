@@ -11,6 +11,36 @@ from typing import List, Optional
 from pydantic import BaseModel, Field
 
 
+# ── Auth ──────────────────────────────────────────────────────────────────────
+
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+
+class RegisterRequest(BaseModel):
+    name: str
+    email: str
+    mobile: str
+    password: str
+    location_id: Optional[str] = None
+
+
+class UserProfile(BaseModel):
+    id: str
+    name: str
+    email: str
+    mobile: str
+    role: str
+    location_id: Optional[str] = None
+
+
+class AuthResponse(BaseModel):
+    token: str
+    user: UserProfile
+
+
 # ── Health ──────────────────────────────────────────────────────────────────
 
 

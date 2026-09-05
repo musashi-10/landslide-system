@@ -1,10 +1,10 @@
 import type { RiskLevel } from '../types/risk';
 
 export const RISK_COLORS: Record<RiskLevel, { bg: string; border: string; text: string; fill: string }> = {
-  LOW:      { bg: '#d1fae5', border: '#059669', text: '#064e3b', fill: '#10b981' },
-  MODERATE: { bg: '#fef3c7', border: '#d97706', text: '#78350f', fill: '#f59e0b' },
-  HIGH:     { bg: '#fee2e2', border: '#dc2626', text: '#7f1d1d', fill: '#ef4444' },
-  CRITICAL: { bg: '#4c1d95', border: '#7c3aed', text: '#ede9fe', fill: '#8b5cf6' },
+  LOW:      { bg: 'rgba(34,197,94,0.12)',   border: '#16a34a', text: '#86efac', fill: '#22c55e' },
+  MODERATE: { bg: 'rgba(245,158,11,0.12)',  border: '#d97706', text: '#fde68a', fill: '#f59e0b' },
+  HIGH:     { bg: 'rgba(239,68,68,0.12)',   border: '#dc2626', text: '#fca5a5', fill: '#ef4444' },
+  CRITICAL: { bg: 'rgba(168,85,247,0.12)',  border: '#9333ea', text: '#d8b4fe', fill: '#a855f7' },
 };
 
 export function riskBadgeStyle(level: RiskLevel) {

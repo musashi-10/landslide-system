@@ -1,71 +1,103 @@
-import { useState } from 'react';
-import { useRiskMap } from './hooks/useRiskMap';
-import { useCurrentRisk } from './hooks/useCurrentRisk';
-import { useAlerts } from './hooks/useAlerts';
-import { RiskMap } from './components/Map/RiskMap';
-import { RiskPanel } from './components/RiskPanel/RiskPanel';
-import { AlertBanner } from './components/AlertBanner/AlertBanner';
-import { Legend } from './components/Legend/Legend';
+/**
+ * App.tsx — root application with full routing.
+ *
+ * Routes:
+ *   / → Landing
+ *   /login → Login
+ *   /register → Register
+ *   /dashboard → UserDashboard (user only)
+ *   /alerts → UserAlerts (user only)
+ *   /settings → UserSettings (user only)
+ *   /authority/command → CommandCenter (authority only)
+ *   /authority/map → AuthRiskMap (authority only)
+ *   /authority/alerts → ActiveAlerts (authority only)
+ *   /authority/history → AlertHistory (authority only)
+ *   /authority/system → SystemStatus (authority only)
+ */
+
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { Navbar } from './components/layout/Navbar';
+
+// Pages
+import { Landing } from './pages/Landing';
+import { Login } from './pages/auth/Login';
+import { Register } from './pages/auth/Register';
+import { UserDashboard } from './pages/user/UserDashboard';
+import { UserAlerts } from './pages/user/UserAlerts';
+import { UserSettings } from './pages/user/UserSettings';
+import { CommandCenter } from './pages/authority/CommandCenter';
+import { AuthRiskMap } from './pages/authority/AuthRiskMap';
+import { ActiveAlerts } from './pages/authority/ActiveAlerts';
+import { AlertHistory } from './pages/authority/AlertHistory';
+import { SystemStatus } from './pages/authority/SystemStatus';
 
 const IS_MOCK = import.meta.env.VITE_USE_MOCK_API === 'true';
 
 export default function App() {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-
-  const { data: mapData, loading: mapLoading, error: mapError, lastUpdated } = useRiskMap(30_000);
-  const { current, history, factors, loading: panelLoading, error: panelError } = useCurrentRisk(selectedId);
-  const { alerts } = useAlerts(15_000);
-
-  const locations = mapData?.locations ?? [];
-
   return (
-    <div className="app-shell">
-      {/* ── Top Bar ──────────────────────────────────────────────────── */}
-      <header className="topbar" role="banner">
-        <div className="topbar__brand">
-          <span className="topbar__icon" aria-hidden="true">🗺️</span>
-          <h1 className="topbar__title">Landslide Early Warning System</h1>
-        </div>
-        <div className="topbar__meta">
-          {IS_MOCK && <span className="mock-badge">MOCK DATA</span>}
-          {lastUpdated && (
-            <span className="last-updated" aria-live="polite">
-              Updated {lastUpdated.toLocaleTimeString()}
-            </span>
-          )}
-        </div>
-      </header>
+    <AuthProvider>
+      <div className="app-shell">
+        <Navbar />
+        {IS_MOCK && <div className="global-mock-bar">MOCK DATA MODE — backend not connected</div>}
 
-      {/* ── Alert Banner ──────────────────────────────────────────────── */}
-      {alerts.length > 0 && <AlertBanner alerts={alerts} />}
+        <main className="app-main" role="main">
+          <Routes>
+            {/* Public */}
+            <Route path="/" element={<Landing />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
 
-      {/* ── Main Layout ──────────────────────────────────────────────── */}
-      <main className="main-layout" role="main">
-        {/* Left panel — risk detail */}
-        <aside className="side-panel" aria-label="Location risk details">
-          <RiskPanel
-            locationId={selectedId ?? ''}
-            current={current}
-            history={history}
-            factors={factors}
-            loading={panelLoading}
-            error={panelError}
-          />
-        </aside>
+            {/* User (citizen) routes */}
+            <Route path="/dashboard" element={
+              <ProtectedRoute requiredRole="user">
+                <UserDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/alerts" element={
+              <ProtectedRoute requiredRole="user">
+                <UserAlerts />
+              </ProtectedRoute>
+            } />
+            <Route path="/settings" element={
+              <ProtectedRoute requiredRole="user">
+                <UserSettings />
+              </ProtectedRoute>
+            } />
 
-        {/* Map */}
-        <section className="map-section" aria-label="Risk map">
-          <RiskMap
-            locations={locations}
-            selectedId={selectedId}
-            onSelectLocation={setSelectedId}
-            loading={mapLoading}
-            error={mapError}
-            lastUpdated={lastUpdated}
-          />
-          <Legend />
-        </section>
-      </main>
-    </div>
+            {/* Authority routes */}
+            <Route path="/authority/command" element={
+              <ProtectedRoute requiredRole="authority">
+                <CommandCenter />
+              </ProtectedRoute>
+            } />
+            <Route path="/authority/map" element={
+              <ProtectedRoute requiredRole="authority">
+                <AuthRiskMap />
+              </ProtectedRoute>
+            } />
+            <Route path="/authority/alerts" element={
+              <ProtectedRoute requiredRole="authority">
+                <ActiveAlerts />
+              </ProtectedRoute>
+            } />
+            <Route path="/authority/history" element={
+              <ProtectedRoute requiredRole="authority">
+                <AlertHistory />
+              </ProtectedRoute>
+            } />
+            <Route path="/authority/system" element={
+              <ProtectedRoute requiredRole="authority">
+                <SystemStatus />
+              </ProtectedRoute>
+            } />
+
+            {/* Catch-all */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </main>
+      </div>
+    </AuthProvider>
   );
 }

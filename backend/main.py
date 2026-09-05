@@ -16,7 +16,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from backend.api import health, risk, alerts, predict
+from backend.api import health, risk, alerts, predict, auth
 from backend.config import get_backend_settings
 
 logger = logging.getLogger(__name__)
@@ -50,6 +50,7 @@ def create_app() -> FastAPI:
     app.include_router(risk.router)
     app.include_router(alerts.router)
     app.include_router(predict.router)
+    app.include_router(auth.router)
 
     # ── Global error handler ─────────────────────────────────────────────────
     @app.exception_handler(Exception)
